@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>To Do list</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet"  type="text/css" href="icon.css">
+		<link rel="stylesheet"  type="text/css" href="todo.css">
+
+	</head>
+	<body>
+		<div class="main">
+			<div class="head">
+				<div class="icon">
+				    <img src="images/icon1.png" alt="menu"/>
+				</div>	
+				<div class="todo">To Do</div>
+				<div class="searchBox">
+						<i class="icon fontIcon ms-Icon ms-Icon--Search iconSize-24" aria-hidden="true"></i>
+						<input type="text" placeholder="Search"/>
+				</div>
+			    <div class="right">
+				    <img src="images/user.png" alt=""/>
+				    <img src="images/user.png" alt=""/>
+				    <i class="icon fontIcon ms-Icon ms-Icon--Megaphone iconSize-24 Icon" 
+				    aria-hidden="true"></i>
+				    <img src="images/user.png" alt=""/>
+			    </div>
+			</div>
+			<div class="body">
+	            <div  class="sidebar" id="menu-bar">
+			        <div id="main-menu" class="sidebar head">
+			            <button>
+			                <input type="hidden" id="bar" value="closed"/>
+			                <img src="images/bar.png" alt="menu"/>
+			            </button>
+			       </div>
+			   
+			      <!-- <div class="sidebar sidebarbody">
+			           <div><img src="images/sun.svg" alt="sun" style="width:20px"/></div>
+			           <div><img src="images/star.png" alt="sun" style="width:20px"/></div>
+			           <div><img src="images/25304.svg" alt="plus" style="width:20px"/></div>
+			       </div>
+			   </div>
+			   <div  class="sidebar" id="largeSidebar">
+			        <div class="sidebar head">
+			            <button onclick="display()">
+			                <input type="hidden" id="large" value="opened"/>
+			                <img src="images/bar.png" alt="menu"/>
+			            </button>-->
+			       
+			       <div class="sidebar sidebarbody" id="list-menu">
+			           <div>
+			               <span><img src="images/sun.svg" alt="sun" style="width:20px"/>
+			               </span>
+			               <span class="left-side-menu">My&nbsp;Day</span>
+			           </div>
+			           <div>
+			                 <span><img src="images/star.png" alt="sun" style="width:20px"/></span>
+			                 <span class="left-side-menu">Important</span>
+			           </div>
+			           <div>
+			                </span>
+			                    <img src="images/25304.svg" alt="plus" style="width:20px"/>
+			                </span>
+			                <span class="left-side-menu"><input type="text" id="new-list"
+                               placeholder="New List"/></span>
+			           </div>
+			       </div>
+			    </div>
+	       </div>
+		</div>		
+		<script src="todo.js"></script>
+	</body>
+</html>

@@ -8,9 +8,15 @@ init();
 function init() {
     addEventListeners(getElementById("main-menu"),"click",openMenu);
     addEventListeners(getElementById("main-menu-plus"),"click",openNavigation);
-    addEventListeners(getElementById("new-subtask"),"keyup",addSubtask);
+    addEventListeners(getElementById("new-subtask"),"keyup",addSubTask);
     addEventListeners(getElementById("newtask"),"keyup",createTask);
+    addEventListeners(getElementById("add-step"),"click",addStep);
+    //addEventListeners(getElementById("circle-change"),"click",deleteSubTask);
 }
+
+
+//Global list declaration
+var list = [];
 
 /**
  * Method to get element from html using id
@@ -119,9 +125,6 @@ function openNavigation() {
     }
 }
 
-//Global list declaration
-var list = [];
-
 /**
  * Method used to create subtask id
  */
@@ -141,10 +144,10 @@ function generateId() {
 function createTask() {
     let taskName = getElementById("newtask");
     if((event.keyCode === 13)&&(taskName.value.trim() !== "")) {
-        var task = {
+        let task = {
             name: taskName.value,
             id: Date.now(),
-            subtask: []
+            subTask: []
         };
         list.push( task );
         taskName.value = "";
@@ -175,14 +178,14 @@ function displayTask(taskName, id) {
  * @param {*} id id for task identification 
  */
 function getTaskDetails(id) {
-    getElementById("display-subtasks").textContent = "";
+
+    getElementById("subtasks").textContent = "";
     for(let i = 0; i < list.length; i++){
         if(list[i].id == id){
             getElementById("listName").value = list[i];
             getElementById("listName").innerHTML = list[i].name;
             getElementById("listName").classList.add("tasks", "task-name");
-            console.log(list[i].subtasks);
-            displaySubtasks(list[i].subtask);
+            displaySubTasks(list[i].subTask );
             break;
         }
     }
@@ -192,12 +195,12 @@ function getTaskDetails(id) {
  * Method to display subtasks from particular task
  * @param {*} subtasks list of subtasks
  */
-function displaySubtasks(subtasks){
-    getElementById("display-subtasks").textContent="";
-    for(let subtask in subtasks){
-        let id = subtasks[subtask].id;
-        let subtaskText = `<div  class="display-subtasks"> ${subtasks[subtask].name} </div>`;
-        getElementById("display-subtasks").insertAdjacentHTML("afterend", subtaskText, id);
+function displaySubTasks( subTasks ){
+    if( subTasks.length > 0){
+        getElementById("subtasks").textContent = "";
+        for(let subTask in subTasks){
+            displaySubTask(subTasks[subTask]);
+        }
     }
 }
 
@@ -205,29 +208,55 @@ function displaySubtasks(subtasks){
  * Method used to display subtask after one subtask added
  * @param {*} subtask subtask object contains one subtask detail
  */
-function displaySubtask(subtask){
-        let id = subtask.id;
-        let subtaskText = `<div>${subtask.name}</div>`;
-        getElementById("display-subtasks").insertAdjacentHTML("beforeend", subtaskText, id);
-        getElementById("display-subtasks").appendChild(document.createElement("hr"));
+function displaySubTask(subTask){
+        let id = subTask.id;
+        let subTaskText = `<div class = "sub-task" id="add-step" value="${subTask}>
+                            <button class = "left">
+                                <span><img src = "images/circle.svg"/></span>
+                            </button>
+                            <span class="middle">${subTask.name}</span>
+                            <span class="right"><i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i></span>
+                          </div>`;
+        getElementById("subtasks").insertAdjacentHTML("beforeend", subTaskText, id);
+        getElementById("subtasks").appendChild(document.createElement("hr"));
 }
 
 /**
  * Method used to add subtask into task
  */
-function addSubtask(){
+function addSubTask(){
     var subTaskName = getElementById("new-subtask");
     if((event.keyCode == 13)&&(subTaskName.value.trim() !== "")) {
         var task = getElementById("listName").value;
-        var subtask = {
+        var subTask = {
             name : subTaskName.value,
             id : generateId(),
             step : [],
             done : false
         };
-        var subtasks = task.subtask;
-        subtasks.push(subtask);
-        subTaskName.value="";
-        displaySubtask(subtask);
+        var subTasks = task.subTask;
+        subTasks.push(subTask);
+        subTaskName.value = "";
+        displaySubTask(subTask);
     }
+}
+
+function addStep(){
+
+}
+
+function deleteSubTask(){
+    let subTaskId = Number(getElementById("circle-change").value);
+    let task = getElementById("task-object").value;
+    for(let subTask in task.subTask){
+        if(subTaskId == subTask.id){
+            subtask.done = true;
+            let text =  `<button class = "left" id = "circle-change">
+                            <input type="hidden" id = "tast-object" value="${task}"/>
+                            <span><img src = "images/chevron-circle-down.svg"/></span>
+                        </button>`;
+            getElementById("cicle-change").innerHTML = text;
+        }
+    }
+
 }

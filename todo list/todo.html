@@ -11,15 +11,15 @@
 	<body>
 		<div class="main">
 			<div class="head">
-				<div class="head-icon">
+				<div class="head-image">
 				    <img src="images/icon1.png" alt="menu"/>
 				</div>	
 				<div class="todo">To Do</div>
-				<div class="searchBox">
+				<div class="search-box">
 						<i class="icon fontIcon ms-Icon ms-Icon--Search iconSize-24" aria-hidden="true"></i>
 						<input type="text" placeholder="Search"/>
 				</div>
-			    <div class="head-right">
+			    <div class="head-right-side">
 				    <img src="images/user.png" alt=""/>
 				    <img src="images/user.png" alt=""/>
 				    <i class="icon fontIcon ms-Icon ms-Icon--Megaphone iconSize-24 Icon" 
@@ -27,41 +27,41 @@
 				    <img src="images/user.png" alt=""/>
 			    </div>
 			</div>
-			<div class="body">
-	            <div  class="sidebar" id="menu-bar">
-			        <div id="main-menu" class="sidebar head">
+			<div class="todo-body">
+	            <div  class="side-bar" id="menu-bar">
+			        <div id="main-menu" class="side-bar head">
 			            <button>
-			                <input type="hidden" id="bar" value="closed"/>
+			                <input type="hidden" id="menu" value="closed"/>
 			                <img src="images/bar.png" alt="menu"/>
 			            </button>
 			        </div>
-			        <div class="sidebar sidebarbody" id="list-menu">
+			        <div class="side-bar side-bar-menu" id="list-menu">
 			            <div>
-			                <button class="change-nav" onclick="myDay()">
+			                <button class="change-navigation" onclick="myDay()">
 			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Sunny iconSize-24" aria-hidden="true"></i></span>
 			                    </button>
 			                <span id="myday" class="left-side-menu">My&nbsp;Day</span>
 			            </div>
 			            <div>
-			                    <button class="change-nav" onclick="important()">
+			                    <button class="change-navigation" onclick="important()">
 			                        <span><i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i></span>
 			                    </button>
 			                <span id="important" class="left-side-menu">Important</span>
 			            </div>
 			            <div>
-			                    <button class="change-nav" onclick="planned()">
+			                    <button class="change-navigation" onclick="planned()">
 			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Calendar iconSize-24" aria-hidden="true"></i></span>
 			                    </button>
 			                <span id="planned" class="left-side-menu">Planned</span>
 			            </div>
 			            <div>
-			                    <button class="change-nav" onclick="assigned()">
+			                    <button class="change-navigation" onclick="assigned()">
 			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Contact iconSize-24" aria-hidden="true"></i>
 			                    </button>
 			                <span id="assigned" class="left-side-menu">Assinged&nbsp;to&nbsp;me</span>
 			            </div>
 			            <div>
-			                    <button class="change-nav" onclick="task()">
+			                    <button class="change-navigation" onclick="task()">
 			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Home iconSize-24" aria-hidden="true"></i>
 			                    </button>
 			                <span id="task" class="left-side-menu">Tasks</span>
@@ -75,22 +75,32 @@
                                 </span>
 			                </button>
 			                <span class="left-side-menu">
-			                    <input type="text" id="newtask" maxlength="25" 
-			                    placeholder="New List"/>
+			                    <input type="text" id="new-task" maxlength="25" 
+			                    	placeholder="New List"/>
                             </span>
 			            </div>
 			        </div>
                 </div>
                 <div class = "center-page">
-					<div id = "listName">Tasks</div>
-					<div id = "subtasks" class="display-subtasks"></div>
+					<div id = "list-name" class="task-name">Tasks</div>
+					<div id = "sub-tasks" class="display-subtasks"></div>
 					<div>
                         <span><i class = "icon fontIcon ms-Icon ms-Icon--Add iconSize-24" aria-hidden = "true"></i></span>
                         <span>
                             <input type = "text" id="new-subtask" maxlength = "255" placeholder = "Add Task"/>
                         </span>
                     </div>
-                </div>
+				</div>
+				<div id="right" class="right">
+					<div id="subTask-name" class="step"></div>
+					<div id="steps"></div>
+					<div>
+                        <span><i class = "icon fontIcon ms-Icon ms-Icon--Add iconSize-24" aria-hidden = "true"></i></span>
+                        <span>
+                            <input type = "text" id="new-step" maxlength = "40" placeholder = "Add Step"/>
+                        </span>
+                    </div>
+				</div>
 	        </div>
         </div>		
 		<script src="todo.js"></script>

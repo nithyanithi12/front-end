@@ -8,7 +8,6 @@ html, body {
     font-family:Helvetica,sans-serif,Arial;
 }
 .main{
-	height: -webkit-fill-available;;
 	width:100%;
 }
 .head{
@@ -75,48 +74,54 @@ input{
     color:#ffffff;
 }
 .todo-body{
+    width:100%;
     display:flex;
 }
 .side-bar{
     background-color:#f4f4f4;
-    width:50px;
+    width:3%;
+    padding:0;
+}
+.side-bar button{
+    width:12%;
 }
 .side-bar .head{
     height:48px;
+    background-color:transparent;
 }
 .side-bar .head img{
     width:20px;
 }
 .side-bar-menu {
     height:681px;
+    width:5%
 }
 .side-bar-menu div{
     display:flex;
 }
 .side-bar-menu img{
     margin-top:18px;
-    padding: 2px 2px 2px 10px;
 }
 
 .left-side-menu {
-    margin-top:17px;
+    margin-top:16px;
+    margin-left:23px;
     color:#34373d;
     display: none;
 }
 .left-side-menu-open{
     display:block !important;
-    width:200px;
+
 }
 .left-side-menu-close{
     display:none !important;
-    width:50px;
 }
 .menu-bar-open {
-    width: 290px;
+    width: 20%;
     height:681px;
 }
 .menu-bar-close {
-   width: 50px;
+   width: 3%;
    height:681px;
 }
 .change-navigation{
@@ -128,7 +133,11 @@ input{
     cursor:pointer;
 }
 .center-page{
-    margin:0;
+    width:80%;
+    display:flex;
+}
+.center-content{
+    width:100%;
 }
 .tasks{
     margin-left:10px;
@@ -149,35 +158,58 @@ input{
 .sub-task{
     height:52px;
     margin-top:10px;
+    display:flex;
 }
-.sub-task  > .center-left{
-    width:30px;    
-}
-.sub-task > .middle{
+.display-subtasks .sub-task button{
+    width:3%;    
+} 
+.display-subtasks .sub-task .middle{
     padding:10px;
     font-size:15px;
+    width:80%;
 }
-.sub-task > .center-right{
-    margin-left:1100px;
+.display-subtasks .sub-task .center-right{
+    width:25px;
 }
-.right{
-    width:30%;
+#steps button{
+    width:25px;    
+} 
+#steps .middle{
+    width:25px;    
+} 
+.display-subtasks .sub-task .middle{
+    padding:10px;
+    font-size:15px;
+    width:80%;
+}
+.display-subtasks .sub-task .center-right{
+    width:25px;
+}
+.right-side{
+    width:20%;
     display:none;
 }
-.right-open{
+.right-side-open{
     display:block;
 }
-.right-close{
+.right-side-close{
     display:none;
 }
 .close-button{
     display:none;
 }
-.sub-task:hover{
+/*.sub-task:hover{
     display:block;
     cursor:pointer;
     background-color:#f4f6ff;
-}
+}*/
 .close-button:hover{
     display:block;
+}
+#input-box:focus{
+    width:auto;
+    height:39px;
+}
+.line-through{
+    text-decoration: line-through;
 }

@@ -6,18 +6,29 @@ init();
  * Method to initialize all event listeners when the javascript code loaded in browser
  */
 function init() {
-    addEventListeners(getElementById("main-menu"),"click",openMenu);
-    addEventListeners(getElementById("main-menu-plus"),"click",openNavigation);
-    addEventListeners(getElementById("new-subtask"),"keyup",addSubTask);
-    addEventListeners(getElementById("new-task"),"keyup",createTask);
-    addEventListeners(getElementById("new-step"),"keyup",addStep);
-    
+    addEventListeners(getElementById("main-menu"), "click", openMenu);
+    addEventListeners(getElementById("main-menu-plus"), "click", openNavigation);
+    addEventListeners(getElementById("new-subtask"), "keyup", addSubTask);
+    addEventListeners(getElementById("new-task"), "keyup", createTask);
+    addEventListeners(getElementById("new-step"), "keyup", addStep);
+    addEventListeners(getElementById("list-update"), "keyup", updateTaskName);
+    addEventListeners(getElementById("subtask-update"), "keyup", updateSubTaskName);
+   // addEventListeners(getElementById("steps"), "keyup", updateStepName);
     //addEventListeners(getElementById("circle-change"),"click",deleteSubTask);
 }
 
+function getComponentById(id) {
+    return document.getElementById(id);
+}
+function build(element) {
+    return document.createElement(element);
+}
 
 //Global list declaration
-var list = [];
+let list = [];
+let taskObject;
+let subTaskObject;
+let stepObject;
 
 /**
  * Method to get element from html using id
@@ -105,18 +116,18 @@ function assigned(){
 /**
  * Method used to change Assigned attribute style
  */
-function task(){
-    document.getElementById("task").style.fontWeight="600";
-    document.getElementById("task").style.color="#3e69e9";
+function tasks(){
+    document.getElementById("tasks").style.fontWeight="600";
+    document.getElementById("tasks").style.color="#3e69e9";
 }
 
 /**
  * Method used to open navigation bar,when user press the plus(+) icon
  */
 function openNavigation() {
-    var leftMenu = getElementById("menu");
-    var menuDiv = getElementById("menu-bar");
-    var elements = getElementsByClassName("left-side-menu");
+    let leftMenu = getElementById("menu");
+    let menuDiv = getElementById("menu-bar");
+    let elements = getElementsByClassName("left-side-menu");
     if (leftMenu.value === "closed") {
         menuDiv.setAttribute("class","side-bar menu-bar-open");
         leftMenu.value = "opened";
@@ -145,34 +156,58 @@ function createTask() {
     }
 }
 
-
 /**
  * Method get invoked when user presses one task,it will show task name on center page
  * @param {*} id id for task identification 
  */
 function getTaskDetails(id) {
-
     getElementById("sub-tasks").textContent = "";
     hideSteps();
-    for(let i = 0; i < list.length; i++){
-        if(list[i].id == id){
-            getElementById("list-name").value = list[i];
-            let text = `<i id="click-task" class="icon fontIcon ms-Icon ms-Icon--More iconSize-24" aria-hidden="true"></i>`; 
-            getElementById("list-name").innerHTML = list[i].name+"   "+text;
+    taskObject = getTask( id );
+            getElementById("list-update").value = taskObject;
+            getElementById("list-name").value = taskObject.name;
             getElementById("list-name").classList.add("tasks", "task-name");
-            displaySubTasks(list[i].subTasks );
-            addEventListeners(getElementById("click-task"),"click",deleteTask).bind(list[i]);
-            break;
+            displaySubTasks(taskObject.subTasks );
+        //let text = `<i id="click-task" class="icon fontIcon ms-Icon ms-Icon--More iconSize-24" aria-hidden="true"></i>`; 
+}
+
+/**
+ * Method to get bject for a particular id
+ */
+function getTask( id ){
+    for( let task of list ){
+        if( task.id == id ){
+            return task;
         }
+    }
+}
+/**
+ * Method used to update task name when user gives task nameand press enter keycode
+ */
+function updateTaskName() {
+    let taskName = getElementById("list-name").value;
+    if((event.keyCode === 13)&&("" !== taskName.trim())) {
+        taskObject.name = taskName;
+        displayTasks();
+    }
+}
+
+/**
+ * Method used to display all tasks in list
+ */
+function displayTasks(){
+    getElementById( "list" ).textContent ="";
+    for( let task of list ){
+        displayTask( task.name, task.id );
     }
 }
 
 /**
  * Method used to display particular task using taskname and task id
- * @param {*} taskName name of the task to be displayed
- * @param {*} id id for task identification
+ * @param {string} taskName name of the task to be displayed
+ * @param {string} id id for task identification
  */
-function displayTask(taskName, id) {
+function displayTask( taskName, id ) {
     const text = `<div onclick="getTaskDetails(${id})" class="tasks">
                     <span class="ms-Icon ms-Icon--BulletedList2 iconSize-24" 
                         aria-hidden="true">
@@ -198,17 +233,28 @@ function deleteTask(){
 function addSubTask(){
     var subTaskName = getElementById("new-subtask");
     if((event.keyCode == 13)&&(subTaskName.value.trim() !== "")) {
-        var task = getElementById("list-name").value;
         var subTask = {
             name : subTaskName.value,
             id : Date.now(),
             steps : [],
+            favorite:false,
             done : false
         };
-        var subTasks = task.subTasks;
+        var subTasks = taskObject.subTasks;
         subTasks.push(subTask);
         subTaskName.value = "";
         displaySubTask(subTask);
+    }
+}
+
+/**
+ * Method used to update sub task name in list
+ */
+function updateSubTaskName(){
+    let subTaskName = getElementById("subtask-name").value;
+    if((event.keyCode === 13)&&( "" !== subTaskName.trim() )){
+        subTaskObject.name = subTaskName;
+        displaySubTasks( taskObject.subTasks );
     }
 }
 
@@ -217,7 +263,7 @@ function addSubTask(){
  * @param {*} subtasks list of subtasks
  */
 function displaySubTasks( subTasks ){
-    if( subTasks.length > 0){
+    if( subTasks ){
         getElementById("sub-tasks").textContent = "";
         for(let subTask in subTasks){
             displaySubTask(subTasks[subTask]);
@@ -239,7 +285,6 @@ function displaySubTask(subTask){
                             <span class="center-right"><i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i></span>
                           </div>`;
         getElementById("sub-tasks").insertAdjacentHTML("beforeend", subTaskText, id);
-        getElementById("sub-tasks").appendChild(document.createElement("hr"));
 }
 
 
@@ -249,7 +294,7 @@ function displaySubTask(subTask){
 function addStep(){
     var step = getElementById("new-step");
     if((event.keyCode == 13)&&(step.value.trim() !=="")){ //enter keycode is 13
-        var subTask = getElementById("subTask-name").value;
+        var subTask = subTaskObject;
         var step = {
             id:Date.now(),
             name:step.value,
@@ -271,10 +316,11 @@ function showStepDetails( id ){
     for( let task of list ){
         for( let subTask of task.subTasks ){
             if( subTask.id === Number(id) ){
+                subTaskObject = subTask;
                 getElementById("steps").textContent = "";
-                getElementById("subTask-name").value = subTask;
-                getElementById("subTask-name").innerHTML = subTask.name;
-                getElementById("subTask-name").classList.add("tasks", "task-name");
+                //getElementById("subtask-name").value = subTask;
+                getElementById("subtask-name").value = subTask.name;
+                getElementById("subtask-name").classList.add("tasks", "task-name");
                 displaySteps( subTask );
                 break;
             }
@@ -287,14 +333,14 @@ function showStepDetails( id ){
  * Method to show steps using css class
  */
 function showSteps(){
-    getElementById("right").setAttribute("class","right right-open");
+    getElementById("right").setAttribute("class","right-side right-side-open");
 }
 
 /**
  * Method to hide steps using css class
  */
 function hideSteps(){
-    getElementById("right").setAttribute("class","right right-close");
+    getElementById("right").setAttribute("class","right-side right-close");
 }
 
 /**
@@ -306,7 +352,13 @@ function displaySteps( subTask ){
         getElementById("steps").textContent = "";
         var steps = subTask.steps;
         for(let step of steps){
-            displayStep(step);
+            if(step.completed){
+                displayStepWithStrick(step);
+            }
+            else{
+                displayStep(step);
+            }
+            
         }
     }
 }
@@ -315,10 +367,30 @@ function displaySteps( subTask ){
  * Method used to display step using html code
  * @param {*} step - step object contains id,name,status
  */
+function displayStepWithStrick( step ){
+    let id = step.id;
+    stepObject = step;
+    let stepText = `<div class = "sub-task">
+                            <button id="step-completed" onclick="setStepInComplete()" class = "center-left">
+                                <span><img src = "images/chevron-circle-down.svg"/></span>
+                            </button>
+                            <span class="line-through middle">${step.name}</span>
+                            <span class="close-button">
+                                <i class="icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16" aria-hidden="true"></i>
+                            </span>
+                          </div>`;
+        getElementById("steps").insertAdjacentHTML("beforeend", stepText, id);
+}
+
+/**
+ * Method used to display step using html code
+ * @param {*} step - step object contains id,name,status
+ */
 function displayStep( step ){
     let id = step.id;
+    stepObject = step;
     let stepText = `<div class = "sub-task">
-                            <button class = "center-left">
+                            <button id="step-completed" onclick="setStepComplete.bind(stepObject);" class = "center-left">
                                 <span><img src = "images/circle.svg"/></span>
                             </button>
                             <span class="middle">${step.name}</span>
@@ -327,7 +399,52 @@ function displayStep( step ){
                             </span>
                           </div>`;
         getElementById("steps").insertAdjacentHTML("beforeend", stepText, id);
-        getElementById("steps").appendChild(document.createElement("hr"));
+            var createdList = getComponentById("steps");
+            var newCreatedDiv = build("div");
+            createdList.setAttribute("class", "sub-task");
+            let buttonForOnclick = build("button");
+            buttonForOnclick.getComponentById("step-completed");
+            buttonForOnclick.setAttribute("class", "center-left");
+            var spanForImage = build("span");
+            var cirleIcon = buildComponent("img");
+            var spanForStepName = build("span");
+            var spanForClose = build("span");
+            var iTag = build("i");
+            iTag.setAttribute("class","icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16");
+            
+            cirleIcon.setAttribute("src","images/circle.svg");
+            spanForImage.appendChild(cirleIcon);
+            spanForClose.appendChild(iTag);
+            stepObject = step;
+            spanListName.innerHTML = newTask.name;
+            addEventListeners(spanListName,"click",currentTask.bind(newTask));
+            newCreatedDiv.appendChild(spanForImage);
+            newCreatedDiv.appendChild(spanListName);
+            createdList.appendChild(newCreatedDiv);
+        }
+}
+
+function setStepComplete(){
+    alert(this.name);
+    stepObject.completed = true;
+    displaySteps( subTaskObject );
+}
+
+function setStepInComplete(){
+    alert("not strike");
+    stepObject.completed = false;
+    displaySteps( subTaskObject );
+}
+
+/**
+ * Method to update step name 
+ */
+function updateStepName(){
+    let stepName = getElementById("step-update").value;
+    if((event.keyCode == 13)&&(stepName.trim() !=="")){ //enter keycode is 13
+        stepObject.name = stepName;
+        displaySteps( subTaskObject );
+    }
 }
 
 /*function deleteSubTask(){

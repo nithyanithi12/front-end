@@ -13,7 +13,7 @@ function init() {
     addEventListeners(getElementById("new-step"), "keyup", addStep);
     addEventListeners(getElementById("list-update"), "keyup", updateTaskName);
     addEventListeners(getElementById("subtask-update"), "keyup", updateSubTaskName);
-   // addEventListeners(getElementById("steps"), "keyup", updateStepName);
+    addEventListeners(getElementById("strike-subtask"), "click", strikeSubTask);
     //addEventListeners(getElementById("circle-change"),"click",deleteSubTask);
 }
 
@@ -66,13 +66,13 @@ function openMenu() {
     if (leftMenu.value === "closed") {
         menuDiv.setAttribute("class","side-bar menu-bar-open");
         leftMenu.value = "opened";
-        for(let i in elements){
+        for(let i of elements){
             elements[i].setAttribute("class","left-side-menu left-side-menu-open");
         }
     } else {
         menuDiv.setAttribute("class","side-bar menu-bar-close");
         leftMenu.value = "closed";
-        for(let i in elements){
+        for(let i of elements){
             elements[i].setAttribute("class","left-side-menu left-side-menu-close");
         }
     }
@@ -265,8 +265,8 @@ function updateSubTaskName(){
 function displaySubTasks( subTasks ){
     if( subTasks ){
         getElementById("sub-tasks").textContent = "";
-        for(let subTask in subTasks){
-            displaySubTask(subTasks[subTask]);
+        for(let subTask of subTasks){
+            displaySubTask(subTask, subTask.done);
         }
     }
 }
@@ -275,32 +275,67 @@ function displaySubTasks( subTasks ){
  * Method used to display subtask after one subtask added
  * @param {*} subtask subtask object contains one subtask detail
  */
-function displaySubTask(subTask){
-        let id = subTask.id;
-        let subTaskText = `<div class = "sub-task">
-                            <button class = "center-left">
-                                <span><img src = "images/circle.svg"/></span>
-                            </button>
-                            <span class="middle" id="display-steps" onclick="showStepDetails(${subTask.id})">${subTask.name}</span>
-                            <span class="center-right"><i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i></span>
-                          </div>`;
-        getElementById("sub-tasks").insertAdjacentHTML("beforeend", subTaskText, id);
+function displaySubTask(subTask, status){
+    let id = subTask.id;
+    let createdList = getComponentById("sub-tasks");
+    let newCreatedDiv = build("div");
+    newCreatedDiv.setAttribute("class", "sub-task");
+    let buttonForOnclick = build("button");
+    buttonForOnclick.setAttribute("class", "center-left");
+    let spanForImage = build("span");
+    let cirleIcon = build("img");            
+    newCreatedDiv.appendChild(buttonForOnclick);
+    let spanForStepName = build("span");
+    spanForImage.appendChild(cirleIcon);
+    buttonForOnclick.appendChild(spanForImage);
+    spanForStepName.setAttribute("class", "middle");
+    newCreatedDiv.appendChild(spanForStepName);
+    spanForStepName.onclick=function(e){showStepDetails(subTask.id)};
+    spanForStepName.innerHTML = subTask.name;
+    let spanForClose = build("span");
+    let iTag = build("i");
+    iTag.setAttribute("class", "icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24");
+    spanForClose.appendChild(iTag);
+    newCreatedDiv.appendChild(spanForClose);
+    createdList.appendChild(newCreatedDiv);
+    if(!status){
+        cirleIcon.setAttribute("src","images/circle.svg");
+        spanForStepName.setAttribute("class", "middle line-through-none");
+        buttonForOnclick.onclick = function(e){strikeSubTask(subTask)};
+    }
+    if(status){
+        cirleIcon.setAttribute("src","images/chevron-circle-down.svg");
+        spanForStepName.setAttribute("class", "middle line-through");
+        buttonForOnclick.onclick = function(e){strikeSubTask(subTask)};
+    }
+    showStepDetails(subTask.id);
 }
 
-
+/**
+ * Method to change subtask status
+ * @param {object} subTask 
+ */
+function strikeSubTask(subTask){
+    if( !subTask.done ){
+        subTask.done = true;
+    } else{
+        subTask.done = false;
+    }
+    displaySubTasks(taskObject.subTasks);
+}
 /**
  * Method used to add step into subtask
  */
 function addStep(){
-    var step = getElementById("new-step");
-    if((event.keyCode == 13)&&(step.value.trim() !=="")){ //enter keycode is 13
-        var subTask = subTaskObject;
-        var step = {
+    let stepName = getElementById("new-step").value;
+    if((event.keyCode == 13)&&(stepName.trim() !=="")){ //enter keycode is 13
+        let subTask = subTaskObject;
+        let step = {
             id:Date.now(),
-            name:step.value,
+            name:stepName,
             completed:false
         };
-        var steps = subTask.steps;
+        let steps = subTask.steps;
         steps.push( step );
         displayStep( step );
         getElementById("new-step").value="";
@@ -312,21 +347,35 @@ function addStep(){
  * @param {*} id used for subtask identification
  */
 function showStepDetails( id ){
-    showSteps();
-    for( let task of list ){
-        for( let subTask of task.subTasks ){
+    loop1:for( let task of list ){
+        loop2:for( let subTask of task.subTasks ){
             if( subTask.id === Number(id) ){
                 subTaskObject = subTask;
+                showSteps();
                 getElementById("steps").textContent = "";
-                //getElementById("subtask-name").value = subTask;
                 getElementById("subtask-name").value = subTask.name;
                 getElementById("subtask-name").classList.add("tasks", "task-name");
-                displaySteps( subTask );
-                break;
+                displaySteps(subTaskObject);
+                if(subTask.done){
+                    getElementById("subtask-name").setAttribute("class","line-through middle");
+                    getElementById("image").setAttribute("src","images/chevron-circle-down.svg");
+
+                } else{
+                    getElementById("subtask-name").setAttribute("class","line-through-none middle");
+                    getElementById("image").setAttribute("src","images/circle.svg");
+                }
+                break loop1;
             }
         }
     }
     
+}
+
+function displaySteps( subTaskObject ){
+    getElementById("steps").textContent = "";
+    for(let step of subTaskObject.steps){
+        displayStep(step, step.completed);           
+    }
 }
 
 /**
@@ -344,95 +393,50 @@ function hideSteps(){
 }
 
 /**
- * Method to pass subTask object one by one to displayStep method 
- * @param {*} subTask - subtask steps are iterated
+ * Method used to display step using html code
+ * @param {*} step - step object contains id,name,status
  */
-function displaySteps( subTask ){
-    if((subTask.steps).length > 0){
-        getElementById("steps").textContent = "";
-        var steps = subTask.steps;
-        for(let step of steps){
-            if(step.completed){
-                displayStepWithStrick(step);
-            }
-            else{
-                displayStep(step);
-            }
-            
-        }
+function displayStep( step,flag ){
+    let createdList = getComponentById("steps");
+    let newCreatedDiv = build("div");
+    newCreatedDiv.setAttribute("class", "sub-task");
+    let buttonForOnclick = build("button");
+    buttonForOnclick.setAttribute("class", "center-left");
+    let spanForImage = build("span");
+    let cirleIcon = build("img");            
+    newCreatedDiv.appendChild(buttonForOnclick);
+    let spanForStepName = build("span");
+    spanForImage.appendChild(cirleIcon);
+    buttonForOnclick.appendChild(spanForImage);
+    spanForStepName.setAttribute("class", "middle");
+    newCreatedDiv.appendChild(spanForStepName);
+    spanForStepName.innerHTML = step.name;
+    let spanForClose = build("span");
+    let iTag = build("i");
+    iTag.setAttribute("class","icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16");
+    spanForClose.appendChild(iTag);
+    newCreatedDiv.appendChild(spanForClose);
+    createdList.appendChild(newCreatedDiv);
+    if(!flag){
+        cirleIcon.setAttribute("src","images/circle.svg");
+        stepObject=step;
+        buttonForOnclick.onclick = function(e){setStepComplete(step)};
+    } else {
+        cirleIcon.setAttribute("src","images/chevron-circle-down.svg");
+        stepObject = step;
+        buttonForOnclick.onclick = function(e){setStepInComplete(step)};
+        spanForStepName.setAttribute("class", "middle line-through");
     }
 }
 
-/**
- * Method used to display step using html code
- * @param {*} step - step object contains id,name,status
- */
-function displayStepWithStrick( step ){
-    let id = step.id;
-    stepObject = step;
-    let stepText = `<div class = "sub-task">
-                            <button id="step-completed" onclick="setStepInComplete()" class = "center-left">
-                                <span><img src = "images/chevron-circle-down.svg"/></span>
-                            </button>
-                            <span class="line-through middle">${step.name}</span>
-                            <span class="close-button">
-                                <i class="icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16" aria-hidden="true"></i>
-                            </span>
-                          </div>`;
-        getElementById("steps").insertAdjacentHTML("beforeend", stepText, id);
-}
-
-/**
- * Method used to display step using html code
- * @param {*} step - step object contains id,name,status
- */
-function displayStep( step ){
-    let id = step.id;
-    stepObject = step;
-    let stepText = `<div class = "sub-task">
-                            <button id="step-completed" onclick="setStepComplete.bind(stepObject);" class = "center-left">
-                                <span><img src = "images/circle.svg"/></span>
-                            </button>
-                            <span class="middle">${step.name}</span>
-                            <span class="close-button">
-                                <i class="icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16" aria-hidden="true"></i>
-                            </span>
-                          </div>`;
-        getElementById("steps").insertAdjacentHTML("beforeend", stepText, id);
-            var createdList = getComponentById("steps");
-            var newCreatedDiv = build("div");
-            createdList.setAttribute("class", "sub-task");
-            let buttonForOnclick = build("button");
-            buttonForOnclick.getComponentById("step-completed");
-            buttonForOnclick.setAttribute("class", "center-left");
-            var spanForImage = build("span");
-            var cirleIcon = buildComponent("img");
-            var spanForStepName = build("span");
-            var spanForClose = build("span");
-            var iTag = build("i");
-            iTag.setAttribute("class","icon fontIcon ms-Icon ms-Icon--Cancel iconSize-16");
-            
-            cirleIcon.setAttribute("src","images/circle.svg");
-            spanForImage.appendChild(cirleIcon);
-            spanForClose.appendChild(iTag);
-            stepObject = step;
-            spanListName.innerHTML = newTask.name;
-            addEventListeners(spanListName,"click",currentTask.bind(newTask));
-            newCreatedDiv.appendChild(spanForImage);
-            newCreatedDiv.appendChild(spanListName);
-            createdList.appendChild(newCreatedDiv);
-        }
-}
-
-function setStepComplete(){
-    alert(this.name);
-    stepObject.completed = true;
+function setStepComplete(step){
+    step.completed = true;
     displaySteps( subTaskObject );
 }
 
-function setStepInComplete(){
-    alert("not strike");
-    stepObject.completed = false;
+function setStepInComplete(step){
+    alert("remove");
+    step.completed = false;
     displaySteps( subTaskObject );
 }
 

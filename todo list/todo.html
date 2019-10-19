@@ -3,6 +3,7 @@
 
 	<head>
 		<title>To Do list</title>
+		<script src="https://code.jquery.com/jquery-3.4.1.js" ></script>
 		<link rel="stylesheet"  type="text/css" href="icon.css">
 		<link rel="stylesheet"  type="text/css" href="todo.css">
 
@@ -28,46 +29,55 @@
 			    </div>
 			</div>
 			<div class="todo-body">
-	            <div  class="side-bar" id="menu-bar">
+	            <div  class="side-bar">
 			        <div id="main-menu" class="head">
 			            <button>
-			                <input type="hidden" id="menu" value="closed"/>
+							<input type="hidden" id="menu-status" value="closed"/>
 			                <img src="images/bar.png" alt="menu"/>
 			            </button>
 			        </div>
-			        <div class="side-bar-menu" id="list-menu">
-			            <div>
-			                <button class="change-navigation" onclick="myDay()">
-			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Sunny iconSize-24" aria-hidden="true"></i></span>
-			                    </button>
-			                <span id="myday" class="left-side-menu">My&nbsp;Day</span>
+			        <div                                                     class="side-bar-menu">
+			            <div id="myday" class="sidebar-attribute">
+							<span>
+								<button class="change-navigation">
+			                    	<i class="icon fontIcon ms-Icon ms-Icon--Sunny iconSize-24" aria-hidden="true"></i>
+								</button>
+							</span>
+			                <span id="myday-text" class="left-side-menu">My&nbsp;Day</span>
 			            </div>
-			            <div>
-			                    <button class="change-navigation" onclick="important()">
-			                        <span><i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i></span>
-			                    </button>
+			            <div class="sidebar-attribute">
+							<span>
+							    <button class="change-navigation" onclick="important()">
+			                        <i class="icon fontIcon ms-Icon ms-Icon--FavoriteStar iconSize-24" aria-hidden="true"></i>
+								</button>
+							</span>
 			                <span id="important" class="left-side-menu">Important</span>
 			            </div>
-			            <div>
-			                    <button class="change-navigation" onclick="planned()">
-			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Calendar iconSize-24" aria-hidden="true"></i></span>
-			                    </button>
+			            <div class="sidebar-attribute">
+							<span>
+							    <button class="change-navigation" onclick="planned()">
+			                        <i class="icon fontIcon ms-Icon ms-Icon--Calendar iconSize-24" aria-hidden="true"></i>
+								</button>
+							</span>
 			                <span id="planned" class="left-side-menu">Planned</span>
 			            </div>
-			            <div>
-			                    <button class="change-navigation" onclick="assigned()">
-			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Contact iconSize-24" aria-hidden="true"></i>
-			                    </button>
+			            <div class="sidebar-attribute">
+							<span>
+							    <button class="change-navigation" onclick="assigned()">
+			                        <i class="icon fontIcon ms-Icon ms-Icon--Contact iconSize-24" aria-hidden="true"></i>
+								</button>
+							</span>
 			                <span id="assigned" class="left-side-menu">Assinged&nbsp;to&nbsp;me</span>
 			            </div>
-			            <div>
-			                    <button class="change-navigation" onclick="task()">
-			                        <span><i class="icon fontIcon ms-Icon ms-Icon--Home iconSize-24" aria-hidden="true"></i>
-			                    </button>
+			            <div class="sidebar-attribute">
+							<span>
+								<button class="change-navigation" onclick="task()">
+			                        <i class="icon fontIcon ms-Icon ms-Icon--Home iconSize-24" aria-hidden="true"></i>
+								</button>
+							</span>
 			                <span id="tasks" class="left-side-menu">Tasks</span>
 			            </div>
-			            <span id="list"> 
-                        </span>
+			            <div id="list"></div>
 			            <div id="main-menu-plus">
 			                <button>
                                 <span>

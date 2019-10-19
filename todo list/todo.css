@@ -79,58 +79,50 @@ input{
 }
 .side-bar{
     background-color:#f4f4f4;
-    width:3%;
+    width:50px;
     padding:0;
+    height:725px;
 }
-.side-bar button{
-    width:12%;
+.side-bar-open{
+    width:290px;
+}
+#main-menu button{
+    padding:17px;
 }
 .side-bar .head{
     height:48px;
     background-color:transparent;
+    cursor:pointer;
 }
 .side-bar .head img{
     width:20px;
 }
-.side-bar-menu {
-    height:681px;
-    width:5%
+.side-bar-menu{
+    padding:3px;
+    margin-top:13px;
 }
-.side-bar-menu div{
+.side-bar-menu > div{
     display:flex;
+    padding:7px;
 }
-.side-bar-menu img{
-    margin-top:18px;
-}
-
 .left-side-menu {
-    margin-top:16px;
-    margin-left:23px;
     color:#34373d;
     display: none;
+    cursor:pointer;
+}
+.side-bar-menu .sidebar-attribute:hover{
+    background-color:#ece6e6;
 }
 .left-side-menu-open{
-    display:block !important;
-
-}
-.left-side-menu-close{
-    display:none !important;
-}
-.menu-bar-open {
-    width: 20%;
-    height:681px;
-}
-.menu-bar-close {
-   width: 3%;
-   height:681px;
+    display:block;
+    margin-top:10px;
+    margin-left:23px;
 }
 .change-navigation{
-    width: 290px;
-    height:48px;
-    background-color:#f4f4f4;
-    border:none;
-    outline:none;
-    cursor:pointer;
+    width:20px;
+}
+.myday-text{
+    font-weight:600;
 }
 .center-page{
     width:80%;
@@ -139,13 +131,16 @@ input{
 .center-content{
     width:100%;
 }
+#list{
+    margin-left:8px;
+    display:block;
+}
 .tasks{
-    margin-left:10px;
-    padding:10px;
+    padding:7px;
+    display:flex;
 }
 .tasks-display{
     margin-top:0;
-    padding:2px;
 }
 .task-name{
     font-weight:600;

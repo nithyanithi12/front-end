@@ -6,10 +6,10 @@ init();
  * Method to initialize all event listeners when the javascript code loaded in browser
  */
 function init() {
-    addEventListeners(getElementById("main-menu"), "click", openMenu);
-    addEventListeners(getElementById("main-menu-plus"), "click", openNavigation);
+    //addEventListeners(getElementById("main-menu"), "click", openMenu);
+    //addEventListeners(getElementById("main-menu-plus"), "click", openNavigation);
     addEventListeners(getElementById("new-subtask"), "keyup", addSubTask);
-    addEventListeners(getElementById("new-task"), "keyup", createTask);
+    //addEventListeners(getElementById("new-task"), "keyup", createTask);
     addEventListeners(getElementById("new-step"), "keyup", addStep);
     addEventListeners(getElementById("list-update"), "keyup", updateTaskName);
     addEventListeners(getElementById("subtask-update"), "keyup", updateSubTaskName);
@@ -59,35 +59,37 @@ function addEventListeners(element,action,resultOperation) {
 /**
  * Method used to open and close navigation bar
  */
-function openMenu() {
-    var leftMenu = getElementById("menu");
-    var menuDiv = getElementById("menu-bar");
-    var elements = getElementsByClassName("left-side-menu");
-    if (leftMenu.value === "closed") {
-        menuDiv.setAttribute("class","side-bar menu-bar-open");
-        leftMenu.value = "opened";
-        for(let i in elements){
-            elements[i].setAttribute("class","left-side-menu left-side-menu-open");
-        }
-    } else {
-        menuDiv.setAttribute("class","side-bar menu-bar-close");
-        leftMenu.value = "closed";
-        for(let i in elements){
-            elements[i].setAttribute("class","left-side-menu left-side-menu-close");
-        }
+$("#main-menu").click(function(e){openMenu()});
+$("#new-task").keyup(function(e){createTask()});
+$("#display-task").keyup(function(e){deleteTask()});
+function openMenu(){
+    let menuStatus = $("#menu-status").val();
+    if(menuStatus == "closed"){
+        $("#menu-status").val("opened");
+        $(".side-bar").addClass("side-bar-open");
+        $(".left-side-menu").addClass("left-side-menu-open");
+    } else{
+        $("#menu-status").val("closed");
+        $(".side-bar").removeClass("side-bar-open");
+        $(".left-side-menu").removeClass("left-side-menu-open");
     }
 }
 
 /**
+ * Method used to open navigation bar,when user press the plus(+) icon
+ */
+$("#main-menu-plus").click(function(){
+    $("#menu-status").val("opened");
+    $(".side-bar").addClass("side-bar-open");
+    $(".left-side-menu").addClass("left-side-menu-open");
+});
+
+/**
  * Method used to change my day attribute style
  */
-function myDay(){
-    if(document.getElementById("myday").style.fontSize="14px"){
-        document.getElementById("myday").style.fontWeight="600";
-    } else {
-        document.getElementById("myday").style.fontWeight="400";
-    }
-}
+$("#myday").click(function(){
+    $("#myday-text").toggleClass("myday-text");
+});
 
 /**
  * Method used to change important attribute style
@@ -122,46 +124,30 @@ function tasks(){
 }
 
 /**
- * Method used to open navigation bar,when user press the plus(+) icon
- */
-function openNavigation() {
-    let leftMenu = getElementById("menu");
-    let menuDiv = getElementById("menu-bar");
-    let elements = getElementsByClassName("left-side-menu");
-    if (leftMenu.value === "closed") {
-        menuDiv.setAttribute("class","side-bar menu-bar-open");
-        leftMenu.value = "opened";
-        for(let i in elements){
-            elements[i].setAttribute("class","left-side-menu left-side-menu-open");
-        }
-    }
-}
-
-/**
  * Method used to create task when user gives some text input and press enter keycode
  * 
  */
 function createTask() {
-    let taskName = getElementById("new-task");
-    if((event.keyCode === 13)&&(taskName.value.trim() !== "")) {
+    let taskName = $("#new-task").val();
+    if((13 == event.keyCode)&&("" !== taskName.trim())) {
         let task = {
-            name: taskName.value,
+            name: taskName,
             id: Date.now(),
             subTasks: []
         };
         list.push( task );
-        taskName.value = "";
-        displayTask(task.name, task.id);
+        $("#new-task").val("");
+        displayTask(task);
         getTaskDetails(task.id);
     }
 }
 
 /**
  * Method get invoked when user presses one task,it will show task name on center page
- * @param {*} id id for task identification 
+ * @param {number} taskId id for task identification 
  */
-function getTaskDetails(id) {
-    getElementById("sub-tasks").textContent = "";
+function getTaskDetails( id ) {
+    $("#sub-tasks").text("");
     hideSteps();
     taskObject = getTask( id );
             getElementById("list-update").value = taskObject;
@@ -198,24 +184,22 @@ function updateTaskName() {
 function displayTasks(){
     getElementById( "list" ).textContent ="";
     for( let task of list ){
-        displayTask( task.name, task.id );
+        displayTask( task );
     }
 }
 
 /**
  * Method used to display particular task using taskname and task id
- * @param {string} taskName name of the task to be displayed
- * @param {string} id id for task identification
+ * @param {object} task task object for show
  */
-function displayTask( taskName, id ) {
-    const text = `<div onclick="getTaskDetails(${id})" class="tasks">
-                    <span class="ms-Icon ms-Icon--BulletedList2 iconSize-24" 
+function displayTask( task ) {
+
+    $("#list").append(`<div id="display-task" onclick="getTaskDetails(${task.id})" class="sidebar-attribute tasks">
+                    <div class="ms-Icon ms-Icon--BulletedList2 iconSize-24" 
                         aria-hidden="true">
-                    </span>
-                    <span class="left-side-menu left-side-menu-open tasks-display">${taskName}</div>
-                  </div>`;
-    const position = "beforeend";
-    getElementById("list").insertAdjacentHTML(position, text, id);
+                    </div>
+                    <div class="left-side-menu left-side-menu-open tasks-display">${task.name}</div>
+                  </div>`);
     
 }
 

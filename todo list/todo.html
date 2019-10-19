@@ -84,7 +84,7 @@
 				<div class = "center-page">
 					<div class = "center-content">
 						<div id="list-update">
-							<input type="text" id = "list-name" class="task-name"/>
+							<input type="text" id = "list-name" value="Tasks" class="task-name"/>
 						</div>
 						<div id = "sub-tasks" class="display-subtasks"></div>
 						<div>
@@ -95,7 +95,8 @@
 						</div>
 					</div>
 					<div id="right" class="right-side">
-						<div class="right-head">
+						<div>
+							<div class="right-head">
 							<div class = "center-left" id="strike-subtask">
 								<button><img id="image" src = "images/circle.svg"/></button>
 							</div>
@@ -111,6 +112,37 @@
 							<span>
 								<input type = "text" id="new-step" maxlength = "40" placeholder = "Add Step"/>
 							</span>
+						</div>
+						</div>
+						<div class="right-myday-border">
+							<div class="right-myday">
+								<span><i class="icon fontIcon ms-Icon ms-Icon--Sunny iconSize-24" aria-hidden="true"></i></span>
+								<span>Add to My Day</span>
+							</div>
+						</div>
+					<div class="right-attributes-section">
+						<div class="right-attributes">
+								<span><i class="icon fontIcon ms-Icon ms-Icon--AlarmClock iconSize-24" aria-hidden="true"></i>
+								<span>Remind me</span>
+						</div>
+						<div class="right-attributes">
+								<span><i class="icon fontIcon ms-Icon ms-Icon--Calendar iconSize-24" aria-hidden="true"></i></span>
+								<span>Add due date</span>
+						</div>
+						<div class="right-attributes">
+								<span><i class="icon fontIcon ms-Icon ms-Icon--RecurringEvent iconSize-24" aria-hidden="true"></i></span>
+								<span>Repeat</span>
+						</div>
+					</div>
+						<div class="right-myday-border">
+							<div class="right-myday">
+								<span><i class="icon fontIcon ms-Icon ms-Icon--Attach iconSize-24" aria-hidden="true"></i></span>
+								<span>Add file</span>
+							</div>
+						</div>
+						<div class="right-myday-border">
+						<div class="right-add-note">
+							<span>Add note</span>
 						</div>
 					</div>
 				</div>

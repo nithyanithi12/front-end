@@ -66,13 +66,13 @@ function openMenu() {
     if (leftMenu.value === "closed") {
         menuDiv.setAttribute("class","side-bar menu-bar-open");
         leftMenu.value = "opened";
-        for(let i of elements){
+        for(let i in elements){
             elements[i].setAttribute("class","left-side-menu left-side-menu-open");
         }
     } else {
         menuDiv.setAttribute("class","side-bar menu-bar-close");
         leftMenu.value = "closed";
-        for(let i of elements){
+        for(let i in elements){
             elements[i].setAttribute("class","left-side-menu left-side-menu-close");
         }
     }

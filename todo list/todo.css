@@ -94,6 +94,10 @@ input{
     background-color:transparent;
     cursor:pointer;
 }
+.side-bar .head button{
+    height:100%;
+    width:9%;
+}
 .side-bar .head img{
     width:20px;
 }
@@ -166,12 +170,18 @@ input{
 .display-subtasks .sub-task .center-right{
     width:25px;
 }
-#steps button{
-    width:25px;    
+#steps .center-left{
+    width:10%;   
+    padding:7px; 
 } 
 #steps .middle{
-    width:25px;    
+    width:85%;    
 } 
+.show-steps{
+    margin-top:10px;
+    box-shadow: 24px 25px 0 -24px rgba(0,0,0,0.08);
+    background-color:#ffffff;
+}
 .display-subtasks .sub-task .middle{
     padding:10px;
     font-size:20px;
@@ -181,15 +191,15 @@ input{
     width:25px;
 }
 .right-head{
-    width:90%;
+    width:100%;
     display:flex;
     padding:2%;
 }
-.right-head .center-left {
-    width:30px;
+.right-head .center-left img{
+    width:100%;
 }
 .right-head .step{
-    width:70%;
+    width:85%;
     text-decoration:none;
 }
 .right-head input{
@@ -199,7 +209,6 @@ input{
 
 .right-head .center-right{
     width:5%;
-    margin-left:2%;
 }
 .right-side{
     margin-top: 10px;
